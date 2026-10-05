@@ -33,7 +33,7 @@ command: bash /work/kit/training/job_end_to_end.sh
 
 ## What the job proves before it is allowed to publish
 1. llama-bench LOAD GATE runs the GGUF (not just file-exists)
-2. llama-server starts and protocol/battery_glimmer_cortex.py exits 0 (5/5 probes)
+2. llama-server starts and protocol/battery_glimmer_cortex.py exits 0 (6/6 probes)
 3. sha256 is computed and uploaded alongside the model
 If the battery fails, the job exits 1 and NOTHING publishes. Fail-closed, as specified.
 
