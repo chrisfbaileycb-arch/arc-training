@@ -4,6 +4,9 @@
   "cores": {
     "ornith-9b-cortex": {
       "repo": "Johnny5b/Ornith-9B-CORTEX-GGUF",
+      "base": "ornith-ai/Ornith-1.5-9B",
+      "adapter": "Johnny5b/Ornith-9B-CORTEX-LoRA-v3",
+      "corpus": "Johnny5b/cortex-sft-300 (v3, 404 rows)",
       "quant": "Q4_K_M",
       "match": "v3",
       "approx_gb": 5.63,
@@ -22,6 +25,9 @@
     },
     "mimo-9b-cortex": {
       "repo": "Johnny5b/MiMo-9B-CORTEX-GGUF",
+      "base": "XiaomiMiMo/MiMo-V2.6-Distill-Qwen-9B",
+      "adapter": "Johnny5b/MiMo-9B-CORTEX-LoRA-v1-1",
+      "corpus": "Johnny5b/cortex-sft-300 v3 (404 rows) + 31 converse rows",
       "quant": "Q4_K_M",
       "match": "v1.1",
       "approx_gb": 5.7,
