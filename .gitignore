@@ -1,0 +1,6 @@
+# never commit weights, runtime ledgers, or local noise
+models/weights/
+memories/
+__pycache__/
+*.pyc
+.DS_Store

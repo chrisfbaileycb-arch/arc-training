@@ -1,0 +1,86 @@
+{
+  "version": 2.2,
+  "note": "sha256 is the lie detector: both 9B CORTEX cores are PRE-PINNED to the hashes published in their model cards; download_models.py verifies on receipt and refuses mismatches. Runtime never re-downloads.",
+  "cores": {
+    "ornith-9b-cortex": {
+      "repo": "Johnny5b/Ornith-9B-CORTEX-GGUF",
+      "quant": "Q4_K_M",
+      "match": "v3",
+      "approx_gb": 5.63,
+      "role": "daily driver, runs anywhere (8-16 GB); CORTEX protocol in weights",
+      "context": 8192,
+      "gen_budget_note": "reasoning model \u2014 allow >=800 tokens",
+      "sampling": {
+        "temp": 0.6,
+        "top_p": 0.95
+      },
+      "protocol_note": "ships with CORTEX protocol in weights (v3 battery-verified upstream)",
+      "file": "models/weights/Ornith-9B-CORTEX-v3-Q4_K_M.gguf",
+      "bytes": null,
+      "sha256": "ca2803a2b9510e3d4cb5a51e5e244e8d616c5ec8d1df7193005364834a7d7b93",
+      "state": "pinned"
+    },
+    "mimo-9b-cortex": {
+      "repo": "Johnny5b/MiMo-9B-CORTEX-GGUF",
+      "quant": "Q4_K_M",
+      "match": "v1.1",
+      "approx_gb": 5.7,
+      "role": "daily driver alternate; CORTEX protocol in weights (Rule-1 converse fix)",
+      "context": 8192,
+      "gen_budget_note": "reasoning model \u2014 allow >=800 tokens",
+      "sampling": {
+        "temp": 0.6,
+        "top_p": 0.95
+      },
+      "protocol_note": "ships with CORTEX protocol in weights (v1.1 battery-verified upstream)",
+      "file": "models/weights/MiMo-9B-CORTEX-v1.1-Q4_K_M.gguf",
+      "bytes": null,
+      "sha256": "ec4cb3fbc51821d2bfb50cbc64c5f4a34ba5f3adbaed8335ad0d720219717036",
+      "state": "pinned"
+    },
+    "muse-glimmer-30b": {
+      "repo": "meta-models/Muse-Glimmer-30B-GGUF",
+      "quant": "Q4_K_M",
+      "match": "KQuant-17GB",
+      "approx_gb": 16.8,
+      "role": "strong-host tier (24 GB+ RAM); agentic multimodal; next CORTEX fine-tune base",
+      "context": 131072,
+      "min_llamacpp_build": 10353,
+      "designation": "Aegis-Glimmer-30B (CORTEX-30B)",
+      "protocol": "protocol/glimmer_cortex_system_prompt.txt",
+      "protocol_spec": "protocol/cortex_system_directive.md",
+      "protocol_battery": "protocol/battery_glimmer_cortex.py",
+      "protocol_state": "injected-at-runtime; weights-layer kit in training/ (job pending)",
+      "sampling": {
+        "temp": 1.0,
+        "top_p": 0.95,
+        "top_k": 64,
+        "jinja": true
+      },
+      "companions": {
+        "vision_mmproj": "mmproj-Muse-Glimmer-30B-Q4_K_M.gguf",
+        "spec_drafter": "dflash-Muse-Glimmer-30B-Q4_K_M.gguf"
+      },
+      "file": "models/weights/Muse-Glimmer-30B-KQuant-17GB-Q4_K_M.gguf",
+      "bytes": null,
+      "sha256": null,
+      "state": "pinned"
+    },
+    "muse-glimmer-30b-cortex": {
+      "repo": "Johnny5b/Muse-Glimmer-30B-CORTEX-GGUF",
+      "quant": "Q4_K_M",
+      "match": "v1",
+      "approx_gb": 16.8,
+      "role": "Aegis-Glimmer-30B-CORTEX \u2014 CORE-SPEC v4.2 in weights (planned)",
+      "context": 131072,
+      "min_llamacpp_build": 10353,
+      "designation": "Aegis-Glimmer-30B-CORTEX",
+      "protocol": "protocol/glimmer_cortex_system_prompt.txt",
+      "protocol_state": "PLANNED \u2014 job kit ready (training/); not yet trained",
+      "file": "models/weights/Aegis-Glimmer-30B-CORTEX-v1-Q4_K_M.gguf",
+      "bytes": null,
+      "sha256": null,
+      "state": "planned"
+    }
+  }
+}

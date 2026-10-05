@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS Drive — Offline Runner</title>
+<style>
+:root{--bg:#0b0f14;--panel:#111823;--line:#1e2a3a;--txt:#dbe4ee;--dim:#7d8fa3;--acc:#38d996;--err:#f26d6d;--mono:ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font:15px/1.55 system-ui,sans-serif;height:100vh;display:flex;flex-direction:column}
+header{display:flex;gap:10px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line);background:var(--panel);flex-wrap:wrap}
+.pill{font:11px/1 var(--mono);padding:5px 10px;border-radius:99px;border:1px solid var(--line);color:var(--dim)}
+.pill.ok{color:var(--acc);border-color:#1d5c43}.pill.err{color:var(--err);border-color:#6b2d2d}
+main{flex:1;overflow:auto;padding:20px;max-width:900px;margin:0 auto;width:100%}
+#log{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.msg{padding:10px 14px;border-radius:10px;border:1px solid var(--line);white-space:pre-wrap}
+.msg.user{background:#0d1a2a}.msg.bot{background:var(--panel)}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:10px 0}.bar>div{height:100%;background:var(--acc);width:0%}
+#composer{display:flex;gap:8px;padding:14px 20px;border-top:1px solid var(--line);background:var(--panel)}
+input{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--txt);padding:10px 12px;font:inherit}
+button{background:var(--acc);color:#06281c;border:0;border-radius:8px;padding:10px 16px;font-weight:600;cursor:pointer}
+button.ghost{background:none;border:1px solid var(--line);color:var(--dim);flex:0}
+code{background:#000;padding:1px 5px;border-radius:4px}
+</style></head><body>
+<header><b>AEGIS DRIVE</b>
+<span class="pill" id="net">…</span><span class="pill" id="eng">engine: idle</span><span class="pill" id="mdl">model: none</span></header>
+<main><div id="log"></div><div class="bar" id="loadbar" style="display:none"><div></div></div>
+<p style="color:var(--dim);font-size:13px">Offline GGUF runner. Weights stream from THIS drive via serve.py — never the internet.</p>
+<p style="margin-top:8px;display:flex;gap:8px"><input id="gguf" value="models/weights/Ornith-9B-CORTEX-v3-Q4_K_M.gguf"><button class="ghost" id="load">Load model</button></p></main>
+<div id="composer"><input id="in" placeholder="Ask something… (load a model first)" disabled><button id="send" disabled>Send</button></div>
+<script type="module">
+const $=id=>document.getElementById(id);
+const log=(w,t)=>{const d=document.createElement('div');d.className='msg '+w;d.textContent=t;$('log').appendChild(d);d.scrollIntoView();return d;};
+$('net').textContent='origin: '+location.host+' (drive-local)';$('net').classList.add('ok');
+let wllama=null,ready=false,history=[];
+let SYS='';
+fetch('./protocol/glimmer_cortex_system_prompt.txt').then(r=>r.ok?r.text():'').then(t=>{SYS=t;}).catch(()=>{});
+(async()=>{try{
+ const mod=await import('./vendor/wllama/esm/index.js');
+ wllama=new mod.Wllama({'wllama.wasm':'./vendor/wllama/esm/wasm/wllama.wasm'},{parallelDownloads:3});
+ $('eng').textContent='engine: wllama ready';$('eng').classList.add('ok');
+}catch(e){$('eng').textContent='engine: vendor/ missing';$('eng').classList.add('err');
+ log('bot','vendor/wllama not found — see README for the one-time engine fetch.');}})();
+$('load').onclick=async()=>{if(!wllama)return;
+ const url=$('gguf').value.trim();if(!url.endsWith('.gguf')){log('bot','Path must end in .gguf');return;}
+ $('loadbar').style.display='block';
+ try{await wllama.loadModelFromUrl(url,{progressCallback:({loaded,total})=>{
+  $('loadbar').firstElementChild.style.width=(100*loaded/Math.max(total,1)).toFixed(1)+'%';}});
+ ready=true;$('mdl').textContent='model: '+url.split('/').pop();$('mdl').classList.add('ok');
+ $('in').disabled=false;$('send').disabled=false;
+ if(SYS) history.push({role:'system',content:SYS});
+ log('bot','Model loaded from this drive. Turn Wi-Fi OFF and generate — that is the proof.');
+ }catch(e){log('bot','Load failed: '+e.message);}
+ $('loadbar').style.display='none';};
+async function send(){const q=$('in').value.trim();if(!q||!ready)return;
+ $('in').value='';log('user',q);history.push({role:'user',content:q});
+ const out=log('bot','…');
+ await wllama.createChatCompletion(history,{nPredict:800,sampling:{temp:0.6,top_p:0.95},
+ onNewToken:(t,p,cur)=>{out.textContent=cur;}});
+ history.push({role:'assistant',content:out.textContent});}
+$('send').onclick=send;$('in').addEventListener('keydown',e=>{if(e.key==='Enter')send();});
+</script></body></html>

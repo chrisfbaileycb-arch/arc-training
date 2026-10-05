@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  llama-server:
+    build: { context: ., dockerfile: Dockerfile.runner }
+    container_name: aegis-inference
+    restart: unless-stopped
+    ports: ["8080:8080"]
+    volumes: ["../models/weights:/models:ro"]
+    command: >
+      --model /models/Ornith-9B-CORTEX-v3-Q4_K_M.gguf
+      --ctx-size 8192 --threads 4 --host 0.0.0.0 --port 8080
+  code-server:
+    image: codercom/code-server:latest
+    container_name: aegis-ide
+    restart: unless-stopped
+    ports: ["8443:8080"]
+    environment: [PASSWORD=aegis]
+    volumes: ["../:/home/coder/project"]

@@ -1,0 +1,504 @@
+{
+  "nodes": [
+    {
+      "id": "systems.concurrency.memory_barrier",
+      "kind": "schema",
+      "path": "symbols/schemas/systems/concurrency__memory_barrier.json",
+      "sha256": "3cae1f2868e39f22d207e0fe6590c48f03d81149d11be0954482b993928936cb"
+    },
+    {
+      "id": "systems.concurrency.ring_buffer",
+      "kind": "schema",
+      "path": "symbols/schemas/systems/concurrency__ring_buffer.json",
+      "sha256": "bd382a0e62fa2930fd4e2fd4916d295e5b31f605919381ec420ca79d4497694b"
+    },
+    {
+      "id": "repo.pallets.flask",
+      "kind": "repo_extraction",
+      "path": "symbols/schemas/devtools/pallets__flask__full.json",
+      "sha256": "9ee93f33945a9c9221ee0ba4335429422e8634dc2b85e827d664bf2a51ad3f12"
+    },
+    {
+      "id": "repo.psf.requests",
+      "kind": "repo_extraction",
+      "path": "symbols/schemas/devtools/psf__requests__full.json",
+      "sha256": "3313223426b858f7ba3fd591c3be734d03baf79b8219d7b247ba11e099886828"
+    },
+    {
+      "id": "star.web.python_foundations",
+      "kind": "star",
+      "path": "symbols/schemas/devtools/star__web_python_foundations.json",
+      "sha256": "85d97bca104b7b4312f81fb7e0b48b4021122b0a7b03030bafe6113a04e5e66d"
+    },
+    {
+      "id": "knowledge_vault/health_safety/basic_first_aid.md",
+      "kind": "vault",
+      "path": "knowledge_vault/health_safety/basic_first_aid.md",
+      "sha256": "7eb56d6aeeb5b163cecdeb1560f72f90b1aa94871668a7ff6564da7c5f04703e"
+    },
+    {
+      "id": "knowledge_vault/model_literacy/what_is_a_coder_model.md",
+      "kind": "vault",
+      "path": "knowledge_vault/model_literacy/what_is_a_coder_model.md",
+      "sha256": "6af83853e63e1944f38eb54ecc122b7619f0b2380d68e0869c17861989637c2b"
+    },
+    {
+      "id": "knowledge_vault/cs_foundations/zero_copy.md",
+      "kind": "vault",
+      "path": "knowledge_vault/cs_foundations/zero_copy.md",
+      "sha256": "06392436c453070a62f461c3fe6fc621ba559773224f44ddc798414435ca2b9a"
+    }
+  ],
+  "edges": [
+    {
+      "from": "arch.atomic_ops",
+      "to": "systems.concurrency.memory_barrier",
+      "dir": "upstream"
+    },
+    {
+      "from": "systems.concurrency.memory_barrier",
+      "to": "systems.concurrency.ring_buffer",
+      "dir": "downstream"
+    },
+    {
+      "from": "systems.concurrency.memory_barrier",
+      "to": "sync.rcu",
+      "dir": "downstream"
+    },
+    {
+      "from": "systems.concurrency.memory_barrier",
+      "to": "knowledge_vault/cs_foundations/zero_copy.md",
+      "dir": "vault_ref"
+    },
+    {
+      "from": "systems.concurrency.memory_barrier",
+      "to": "systems.concurrency.ring_buffer",
+      "dir": "upstream"
+    },
+    {
+      "from": "systems.concurrency.ring_buffer",
+      "to": "io.drivers.buffer",
+      "dir": "downstream"
+    },
+    {
+      "from": "systems.concurrency.ring_buffer",
+      "to": "ipc.message_queue",
+      "dir": "downstream"
+    },
+    {
+      "from": "systems.concurrency.ring_buffer",
+      "to": "audio.pipeline.jitter_buffer",
+      "dir": "downstream"
+    },
+    {
+      "from": "systems.concurrency.ring_buffer",
+      "to": "knowledge_vault/cs_foundations/zero_copy.md",
+      "dir": "vault_ref"
+    },
+    {
+      "from": "app",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "blinker",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "blueprints",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "cli",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "click",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "config",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "contextvars",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "ctx",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "globals",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "helpers",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "itsdangerous",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "jinja2",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "markupsafe",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "provider",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "sansio",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "scaffold",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "sessions",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "signals",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "templating",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "werkzeug",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "wrappers",
+      "to": "repo.pallets.flask",
+      "dir": "upstream"
+    },
+    {
+      "from": "__version__",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "_internal_utils",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "_types",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "adapters",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "api",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "auth",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "certifi",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "compat",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "cookies",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "encodings",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "exceptions",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "hooks",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "idna",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "models",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "sessions",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "status_codes",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "structures",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "urllib3",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "utils",
+      "to": "repo.psf.requests",
+      "dir": "upstream"
+    },
+    {
+      "from": "__version__",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "_internal_utils",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "_types",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "adapters",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "api",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "app",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "auth",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "blinker",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "blueprints",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "certifi",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "cli",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "click",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "compat",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "config",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "contextvars",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "cookies",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "ctx",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "encodings",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "exceptions",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "globals",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "helpers",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "hooks",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "idna",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "itsdangerous",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "jinja2",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "markupsafe",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "models",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "provider",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "sansio",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "scaffold",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "sessions",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "signals",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "status_codes",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "structures",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "templating",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "urllib3",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "utils",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "werkzeug",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "wrappers",
+      "to": "star.web.python_foundations",
+      "dir": "upstream"
+    },
+    {
+      "from": "star.web.python_foundations",
+      "to": "repo.pallets.flask",
+      "dir": "represents"
+    },
+    {
+      "from": "star.web.python_foundations",
+      "to": "repo.psf.requests",
+      "dir": "represents"
+    }
+  ]
+}

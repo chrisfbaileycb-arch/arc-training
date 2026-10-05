@@ -1,0 +1,95 @@
+{
+  "symbol_id": "systems.concurrency.ring_buffer",
+  "kind": "schema",
+  "tags": [
+    "ring",
+    "buffer",
+    "fifo",
+    "kfifo",
+    "queue",
+    "circular",
+    "lockless",
+    "spsc",
+    "concurrency",
+    "zero-copy"
+  ],
+  "content": {
+    "overview": "Fixed-size circular buffer with monotonic read/write counters. SPSC case is lockless: producer owns in-counter, consumer owns out-counter, memory-ordering points replace locks. Capacity MUST be a power of two so index = counter & mask.",
+    "structs": [
+      {
+        "name": "__kfifo",
+        "fields": {
+          "in": "unsigned int \u2014 monotonic write counter",
+          "out": "unsigned int \u2014 monotonic read counter",
+          "mask": "unsigned int \u2014 size-1, replaces modulo",
+          "esize": "unsigned int \u2014 element size",
+          "data": "void* \u2014 backing storage"
+        }
+      }
+    ],
+    "operations": [
+      {
+        "name": "kfifo_init",
+        "signature": "kfifo_init(fifo, buffer, size)",
+        "contract": "size power of 2; mask=size-1; in=out=0"
+      },
+      {
+        "name": "kfifo_in",
+        "signature": "kfifo_in(fifo, buf, n) -> unsigned int",
+        "contract": "copy min(n, avail); smp_wmb BEFORE publishing new in-counter; returns elements written"
+      },
+      {
+        "name": "kfifo_out",
+        "signature": "kfifo_out(fifo, buf, n) -> unsigned int",
+        "contract": "copy min(n, len); smp_rmb AFTER payload read BEFORE publishing out-counter"
+      },
+      {
+        "name": "kfifo_len",
+        "signature": "kfifo_len(fifo)",
+        "contract": "in - out (unsigned wrap is exact)"
+      },
+      {
+        "name": "kfifo_avail",
+        "signature": "kfifo_avail(fifo)",
+        "contract": "size - (in - out)"
+      }
+    ],
+    "invariants": [
+      "capacity power of two; index = counter & mask everywhere",
+      "counters never reset in normal operation; unsigned wrap correct by design",
+      "SPSC lockless safety depends on both barrier points; removing them is a data race on ARM/RISC-V",
+      "MPMC requires external serialization; NOT covered by this card"
+    ],
+    "usage_contract": "Writer checks kfifo_avail, reader checks kfifo_len; partial-op return value is authoritative.",
+    "does_not_cover": [
+      "dynamic resizing",
+      "MPMC lock-free (Vyukov queue \u2014 separate card)",
+      "dma mappings"
+    ],
+    "verification_questions": [
+      "size power of two and mask used instead of %?",
+      "write barrier between payload store and in-counter store?",
+      "read barrier between payload load and out-counter store?",
+      "can len/avail tear on 32-bit? (single unsigned load required)"
+    ]
+  },
+  "edges": {
+    "upstream": [
+      "systems.concurrency.memory_barrier"
+    ],
+    "downstream": [
+      "io.drivers.buffer",
+      "ipc.message_queue",
+      "audio.pipeline.jitter_buffer"
+    ]
+  },
+  "vault_refs": [
+    "knowledge_vault/cs_foundations/zero_copy.md"
+  ],
+  "provenance": {
+    "origin": "https://github.com/torvalds/linux (include/linux/kfifo.h, lib/kfifo.c)",
+    "commit": null,
+    "extracted_at": "2026-09-19",
+    "note": "origin is audit metadata only; all knowledge physically embedded"
+  }
+}

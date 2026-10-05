@@ -1,0 +1,92 @@
+{
+  "symbol_id": "systems.concurrency.memory_barrier",
+  "kind": "schema",
+  "tags": [
+    "memory",
+    "barrier",
+    "fence",
+    "ordering",
+    "smp",
+    "wmb",
+    "rmb",
+    "acquire",
+    "release",
+    "atomic",
+    "concurrency"
+  ],
+  "content": {
+    "overview": "CPUs and compilers reorder memory operations. A barrier constrains reordering so effects become visible to other cores in algorithm-required order. Barriers order existing traffic; they do not flush caches or serialize execution.",
+    "taxonomy": [
+      {
+        "name": "compiler barrier",
+        "effect": "stops compiler reordering only"
+      },
+      {
+        "name": "smp_wmb",
+        "effect": "stores before are visible before stores after"
+      },
+      {
+        "name": "smp_rmb",
+        "effect": "loads before complete before loads after"
+      },
+      {
+        "name": "smp_mb",
+        "effect": "orders loads and stores across the point"
+      },
+      {
+        "name": "acquire",
+        "effect": "no op after moves before it; pairs with release"
+      },
+      {
+        "name": "release",
+        "effect": "no op before moves after it; pairs with acquire"
+      }
+    ],
+    "required_patterns": [
+      {
+        "pattern": "flag + payload",
+        "rule": "writer: store payload, release-store flag. reader: acquire-load flag, then load payload. Without the pair, reader can see flag set with stale payload."
+      },
+      {
+        "pattern": "SPSC ring buffer",
+        "rule": "wmb before in-counter publish; rmb before out-counter publish (see systems.concurrency.ring_buffer)"
+      },
+      {
+        "pattern": "double-checked locking",
+        "rule": "broken without acquire on pointer load"
+      }
+    ],
+    "invariants": [
+      "barriers are pairwise: writer-side ordering is meaningless without reader-side pairing",
+      "on x86 TSO most read barriers compile to nothing, but the compiler barrier remains mandatory",
+      "relaxed atomics synchronize nothing by themselves"
+    ],
+    "does_not_cover": [
+      "MESI/MOESI coherence protocols",
+      "transactional memory",
+      "RCU"
+    ],
+    "verification_questions": [
+      "which two ops must not reorder, and on which architectures?",
+      "is there a matching acquire/barrier on the observer side?",
+      "still correct if compiler caches the shared variable in a register?"
+    ]
+  },
+  "edges": {
+    "upstream": [
+      "arch.atomic_ops"
+    ],
+    "downstream": [
+      "systems.concurrency.ring_buffer",
+      "sync.rcu"
+    ]
+  },
+  "vault_refs": [
+    "knowledge_vault/cs_foundations/zero_copy.md"
+  ],
+  "provenance": {
+    "origin": "Linux kernel Documentation/memory-barriers.txt",
+    "commit": null,
+    "extracted_at": "2026-09-19"
+  }
+}
