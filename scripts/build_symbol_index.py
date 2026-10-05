@@ -9,7 +9,8 @@ def sha256(p):
     return h.hexdigest()
 def build(root=ROOT):
     idx, nodes, edges = {"symbols": {}}, [], []
-    for dp, _, fns in os.walk(os.path.join(root, "symbols", "schemas")):
+    for dp, dns, fns in os.walk(os.path.join(root, "symbols", "schemas")):
+        dns.sort()  # deterministic walk order: regenerating must not dirty tracked files
         for fn in sorted(fns):
             if not fn.endswith(".json"): continue
             full = os.path.join(dp, fn); rel = os.path.relpath(full, root)
@@ -24,12 +25,15 @@ def build(root=ROOT):
             for vr in card.get("vault_refs", []): edges.append({"from": sid, "to": vr, "dir": "vault_ref"})
             for rep in card.get("represents", []):
                 edges.append({"from": sid, "to": rep.get("symbol_id", rep.get("repo", "?")), "dir": "represents"})
-    for dp, _, fns in os.walk(os.path.join(root, "knowledge_vault")):
+    for dp, dns, fns in os.walk(os.path.join(root, "knowledge_vault")):
+        dns.sort()
         for fn in sorted(fns):
             full = os.path.join(dp, fn); rel = os.path.relpath(full, root)
             nodes.append({"id": rel, "kind": "vault", "path": rel, "sha256": sha256(full)})
-    json.dump(idx, open(os.path.join(root, "symbols", "symbol_index.json"), "w"), indent=2)
-    json.dump({"nodes": nodes, "edges": edges}, open(os.path.join(root, "models", "knowledge_graph.json"), "w"), indent=2)
+    for d in ("symbols", "models"): os.makedirs(os.path.join(root, d), exist_ok=True)  # fresh checkouts lack these
+    with open(os.path.join(root, "symbols", "symbol_index.json"), "w") as f: json.dump(idx, f, indent=2)
+    with open(os.path.join(root, "models", "knowledge_graph.json"), "w") as f:
+        json.dump({"nodes": nodes, "edges": edges}, f, indent=2)
     return idx, {"nodes": nodes, "edges": edges}
 if __name__ == "__main__":
     idx, g = build()

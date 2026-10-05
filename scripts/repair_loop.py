@@ -8,12 +8,15 @@ OPERATORS = [("sub_to_add"," - "," + "),("add_to_sub"," + "," - "),("mul_to_div"
              ("eq_to_ne"," == "," != "),("ne_to_eq"," != "," == "),("le_to_lt"," <= "," < "),
              ("ge_to_gt"," >= "," > ")]
 def run_tests(d, cmd):
-    r = subprocess.run(cmd, shell=True, cwd=d, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=120)
+    try:
+        r = subprocess.run(cmd, shell=True, cwd=d, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=120)
+    except subprocess.TimeoutExpired:
+        return 0.0, "timeout"  # a hung mutant is just unfit, never a crash that strands a mutated file
     return (1.0 if r.returncode == 0 else 0.0), r.stdout.decode(errors="replace")
 def ledger(e):
     os.makedirs(os.path.dirname(LEDGER), exist_ok=True)
     e = dict(e); e["ts"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-    open(LEDGER, "a").write(json.dumps(e) + "\n")
+    with open(LEDGER, "a") as f: f.write(json.dumps(e) + "\n")
 def mutants(src):
     lines = src.splitlines(keepends=True)
     for i, line in enumerate(lines):
@@ -29,15 +32,21 @@ def repair(target):
     if fit0 == 1.0:
         print("[repair] already passing"); return 0
     for tf in cfg["target_files"]:
-        fp = os.path.join(target, tf); orig = open(fp).read()
-        for meta, cand in mutants(orig):
-            open(fp, "w").write(cand)
-            fit, _ = run_tests(target, cfg["test_command"])
-            ledger({"event": "mutant", "file": tf, "fitness": fit, **meta})
-            if fit == 1.0:
-                print(f"[repair] FIXED by {meta['op']} at {tf}:{meta['line']}")
-                ledger({"event": "repair_success", "file": tf, **meta}); return 0
-        open(fp, "w").write(orig)
+        fp = os.path.join(target, tf)
+        with open(fp) as f: orig = f.read()
+        fixed = False
+        try:
+            for meta, cand in mutants(orig):
+                with open(fp, "w") as f: f.write(cand)
+                fit, _ = run_tests(target, cfg["test_command"])
+                ledger({"event": "mutant", "file": tf, "fitness": fit, **meta})
+                if fit == 1.0:
+                    fixed = True
+                    print(f"[repair] FIXED by {meta['op']} at {tf}:{meta['line']}")
+                    ledger({"event": "repair_success", "file": tf, **meta}); return 0
+        finally:
+            if not fixed:  # any exit (exhausted, crash, Ctrl+C) leaves the original, never a mutant
+                with open(fp, "w") as f: f.write(orig)
     print("[repair] no passing mutant; original restored")
     ledger({"event": "repair_failed", "target": target}); return 1
 if __name__ == "__main__":

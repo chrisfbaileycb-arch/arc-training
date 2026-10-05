@@ -27,19 +27,48 @@ def test_awake_refuses_unknown(capsys):
     rc = elc.awake("zzzqqq unrelated nonsense")
     assert rc == 2 and "refuse-and-propose-repair" in capsys.readouterr().out
 
-def test_repair_loop_actually_fixes(tmp_path):
+def test_repair_loop_actually_fixes(tmp_path, monkeypatch):
+    ledger = tmp_path / "audit_ledger.jsonl"  # tests must never write the real audit ledger
+    monkeypatch.setattr(rl, "LEDGER", str(ledger))
     dst = tmp_path / "bm"
     shutil.copytree(os.path.join(ROOT, "tests", "fixtures", "broken_math"), dst)
     assert rl.repair(str(dst)) == 0
     r = subprocess.run("python -m pytest test_calc.py -q", shell=True, cwd=dst,
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout
-    assert "repair_success" in open(os.path.join(ROOT, "memories", "audit_ledger.jsonl")).read()
+    assert "repair_success" in ledger.read_text()
 
-def test_rest_appends_and_regenerates():
-    ledger = os.path.join(ROOT, "memories", "audit_ledger.jsonl")
-    before = os.path.getsize(ledger) if os.path.exists(ledger) else 0
-    assert elc.rest() == 0 and os.path.getsize(ledger) > before
+def test_repair_loop_restores_original_on_failure(tmp_path, monkeypatch):
+    monkeypatch.setattr(rl, "LEDGER", str(tmp_path / "audit_ledger.jsonl"))
+    (tmp_path / "m.py").write_text("y = 2 - 1\n")  # one mutable operator, test can never pass
+    (tmp_path / ".aegis.config").write_text(json.dumps(
+        {"test_command": "python -c 'raise SystemExit(1)'", "target_files": ["m.py"]}))
+    assert rl.repair(str(tmp_path)) == 1
+    assert (tmp_path / "m.py").read_text() == "y = 2 - 1\n"
+
+def test_repair_loop_restores_original_on_crash(tmp_path, monkeypatch):
+    monkeypatch.setattr(rl, "LEDGER", str(tmp_path / "audit_ledger.jsonl"))
+    calls = []
+    def flaky(d, cmd):  # baseline fails, then the first mutant run crashes the loop
+        calls.append(1)
+        if len(calls) == 1: return 0.0, ""
+        raise KeyboardInterrupt
+    monkeypatch.setattr(rl, "run_tests", flaky)
+    (tmp_path / "m.py").write_text("y = 2 - 1\n")
+    (tmp_path / ".aegis.config").write_text(json.dumps({"test_command": "x", "target_files": ["m.py"]}))
+    with pytest.raises(KeyboardInterrupt):
+        rl.repair(str(tmp_path))
+    assert (tmp_path / "m.py").read_text() == "y = 2 - 1\n"
+
+def test_run_tests_timeout_is_unfit_not_crash(monkeypatch):
+    def hang(*a, **kw): raise subprocess.TimeoutExpired("x", 1)
+    monkeypatch.setattr(rl.subprocess, "run", hang)
+    assert rl.run_tests(".", "x") == (0.0, "timeout")
+
+def test_rest_appends_and_regenerates(tmp_path, monkeypatch):
+    ledger = tmp_path / "audit_ledger.jsonl"
+    monkeypatch.setattr(elc, "LEDGER", str(ledger))
+    assert elc.rest() == 0 and ledger.stat().st_size > 0
     g = json.load(open(os.path.join(ROOT, "models", "knowledge_graph.json")))
     assert g["nodes"] and g["edges"]
 
