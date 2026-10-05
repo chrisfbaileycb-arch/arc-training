@@ -14,7 +14,7 @@ def test_full_corpus_size_and_shape():
 
 def test_anti_contamination_gate():
     blob = open(FULL).read()
-    for forbidden in ("quantum_flux_capacitor", "return a - b"):
+    for forbidden in ("quantum_flux_capacitor", "return a - b", "adds two numbers"):
         assert forbidden not in blob, forbidden
 
 def test_repair_json_all_valid():

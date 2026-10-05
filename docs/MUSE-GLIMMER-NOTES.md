@@ -26,7 +26,7 @@ Vision: --mmproj ...  Speed: -md ... -ngld 99  GPU: -ngl 99. Images one-shot: ll
 ## CORE-SPEC v4.2 protocol
 - Spec (verbatim): protocol/cortex_system_directive.md
 - Runtime prompt:  protocol/glimmer_cortex_system_prompt.txt
-- Live battery:    python protocol/battery_glimmer_cortex.py (5 probes; exit 0 = pass)
+- Live battery:    python protocol/battery_glimmer_cortex.py (6 probes; exit 0 = pass)
 - Weights-layer:   training/JOB-LAUNCH.md (the 30B CORTEX job)
 
 ## Honest placement

@@ -77,7 +77,7 @@ The owner's protocol directive for **Aegis-Glimmer-30B (CORTEX-30B)**, installed
 
 Invariants: **Rule 1 fail-closed** (`[FAIL-CLOSED: Symbol '<NAME>' unresolved in symbol index / active context]`), **[TRACE] grounding** (TARGET_SYMBOLS / SCOPE / STATUS before analytical or patch work), **800-token generation floor**, **§S:REPAIR** patches as strictly valid JSON, and the **CORTEX LEDGER** for every operation.
 
-`protocol/battery_glimmer_cortex.py` grades any live endpoint against the spec — 5 probes, exit 0 only on 5/5, honest abort when no server is up.
+`protocol/battery_glimmer_cortex.py` grades any live endpoint against the spec — 6 probes (including the no-system-prompt code probe), exit 0 only on 6/6, honest abort when no server is up.
 
 ---
 

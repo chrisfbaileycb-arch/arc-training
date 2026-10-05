@@ -1,5 +1,39 @@
 {
   "symbols": {
+    "repo.pallets.flask": {
+      "path": "symbols/schemas/devtools/pallets__flask__full.json",
+      "sha256": "9ee93f33945a9c9221ee0ba4335429422e8634dc2b85e827d664bf2a51ad3f12",
+      "tags": [
+        "flask",
+        "web",
+        "wsgi",
+        "flask",
+        "extraction"
+      ],
+      "kind": "repo_extraction"
+    },
+    "repo.psf.requests": {
+      "path": "symbols/schemas/devtools/psf__requests__full.json",
+      "sha256": "3313223426b858f7ba3fd591c3be734d03baf79b8219d7b247ba11e099886828",
+      "tags": [
+        "requests",
+        "http",
+        "client",
+        "requests",
+        "extraction"
+      ],
+      "kind": "repo_extraction"
+    },
+    "star.web.python_foundations": {
+      "path": "symbols/schemas/devtools/star__web_python_foundations.json",
+      "sha256": "85d97bca104b7b4312f81fb7e0b48b4021122b0a7b03030bafe6113a04e5e66d",
+      "tags": [
+        "web",
+        "devtools",
+        "star"
+      ],
+      "kind": "star"
+    },
     "systems.concurrency.memory_barrier": {
       "path": "symbols/schemas/systems/concurrency__memory_barrier.json",
       "sha256": "3cae1f2868e39f22d207e0fe6590c48f03d81149d11be0954482b993928936cb",
@@ -34,40 +68,6 @@
         "zero-copy"
       ],
       "kind": "schema"
-    },
-    "repo.pallets.flask": {
-      "path": "symbols/schemas/devtools/pallets__flask__full.json",
-      "sha256": "9ee93f33945a9c9221ee0ba4335429422e8634dc2b85e827d664bf2a51ad3f12",
-      "tags": [
-        "flask",
-        "web",
-        "wsgi",
-        "flask",
-        "extraction"
-      ],
-      "kind": "repo_extraction"
-    },
-    "repo.psf.requests": {
-      "path": "symbols/schemas/devtools/psf__requests__full.json",
-      "sha256": "3313223426b858f7ba3fd591c3be734d03baf79b8219d7b247ba11e099886828",
-      "tags": [
-        "requests",
-        "http",
-        "client",
-        "requests",
-        "extraction"
-      ],
-      "kind": "repo_extraction"
-    },
-    "star.web.python_foundations": {
-      "path": "symbols/schemas/devtools/star__web_python_foundations.json",
-      "sha256": "85d97bca104b7b4312f81fb7e0b48b4021122b0a7b03030bafe6113a04e5e66d",
-      "tags": [
-        "web",
-        "devtools",
-        "star"
-      ],
-      "kind": "star"
     }
   }
 }

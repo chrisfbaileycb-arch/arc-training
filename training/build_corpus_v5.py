@@ -19,7 +19,7 @@ def ex(user, assistant):
                          {"role": "user", "content": user},
                          {"role": "assistant", "content": assistant}]}
 
-FORBIDDEN = ["quantum_flux_capacitor", "return a - b", "def add(a, b):"]
+FORBIDDEN = ["quantum_flux_capacitor", "return a - b", "def add(a, b):", "adds two numbers"]
 
 hist, rows = {}, []
 def put(block, user, assistant):

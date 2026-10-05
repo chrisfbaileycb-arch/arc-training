@@ -6,7 +6,7 @@ import json, os, glob
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FULL = os.path.join(ROOT, "training", "corpus_v5_muse_cortex_full.jsonl")
-FORBIDDEN = ["quantum_flux_capacitor", "return a - b", "def add(a, b):"]
+FORBIDDEN = ["quantum_flux_capacitor", "return a - b", "def add(a, b):", "adds two numbers"]
 
 rows = [json.loads(l) for l in open(FULL)]
 SYS = rows[0]["messages"][0]["content"]

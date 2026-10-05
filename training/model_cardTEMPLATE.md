@@ -6,7 +6,7 @@ CORE-SPEC v4.2 in weights: Rule 1 fail-closed, [TRACE] grounding, §S:REPAIR str
 
 | File | sha256 | Status |
 | --- | --- | --- |
-| `Aegis-Glimmer-30B-CORTEX-v1-Q4_K_M.gguf` | `<FILL: from .sha256 sidecar>` | battery 5/5 (job <JOB_ID>) |
+| `Aegis-Glimmer-30B-CORTEX-v1-Q4_K_M.gguf` | `<FILL: from .sha256 sidecar>` | battery 6/6 (job <JOB_ID>) |
 
 ## Training
 - Base: meta-models/Muse-Glimmer-30B (bf16 safetensors)
@@ -19,6 +19,7 @@ CORE-SPEC v4.2 in weights: Rule 1 fail-closed, [TRACE] grounding, §S:REPAIR str
 ## Battery (CORE-SPEC v4.2) — protocol/battery_glimmer_cortex.py
 | Probe | Result | Receipt |
 | converse-normal | <PASS> | <log line> |
+| converse-code-no-system | <PASS> | <log line> |
 | fail-closed-exact | <PASS> | <log line> |
 | trace-header | <PASS> | <log line> |
 | repair-patch-executable (pytest) | <PASS> | exit=0 |
@@ -34,7 +35,7 @@ CORE-SPEC v4.2 in weights: Rule 1 fail-closed, [TRACE] grounding, §S:REPAIR str
   (they pair with this text model; re-derive only if the adapter touched the ViT — it did not).
 
 ## Honesty ledger
-- Measured: the 5 battery probes above, load gate, speed A/B (<fill>), resident RAM (<fill>).
+- Measured: the 6 battery probes above, load gate, speed A/B (<fill>), resident RAM (<fill>).
 - UNMEASURED: everything else — general reasoning, multilingual, long-context, tool-call
   reliability beyond the battery, identity behavior (not trained; may still self-ID as base).
 - Harness notes: <fill — any fixes the battery or harness required, disclosed>
